@@ -34,6 +34,7 @@ endif
 
 call plug#begin('~/.vim/bundle')
 " Place any and all vim-plug plugins here
+Plug 'aquach/vim-mediawiki-editor'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'yggdroot/indentline'
@@ -51,7 +52,7 @@ Plug 'junegunn/goyo.vim', {'off': 'Goyo' }
 Plug 'junegunn/limelight.vim', {'off': 'Limelight' }
 Plug 'junegunn/fzf', {'do': './install --all'}
 Plug 'junegunn/fzf.vim'
-Plug 'gnattishness/cscope_maps'
+ Plug 'gnattishness/cscope_maps'
 " Any vim-plug plugins must come before this point
 call plug#end()
 """"""""""""""""""""""""""
@@ -151,6 +152,7 @@ set showcmd
 let g:airline_extensions = []
 let g:airline#extensions#nerdtree#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tagbar#enabled = 1
 let g:airlineextensions#tabline#show_buffers = 1 " configure whether or not to show buffers on the tabline
 let g:airline#extensions#tabline#buffer_nr_show = 1 " show the index of each buffer
 let g:airline#extensions#tabline#tab_min_count = 2 " configure the minimum number of tabs needed to show the tabline.
@@ -188,6 +190,14 @@ let g:airline#extensions#tabline#fnamemod = ':t' " Only show the filename, not t
  autocmd! User GoyoLeave Limelight!
 
  let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+
+""""""""""""""""
+" MEDIAWIKI    "
+""""""""""""""""
+let g:mediawiki_editor_url = 'rasheedsaad.com'
+let g:mediawiki_editor_path = '/'
+let g:mediawiki_editor_username = 'Saad'
+
 """"""""""""""""
 " KEY MAPPINGS "
 """"""""""""""""
