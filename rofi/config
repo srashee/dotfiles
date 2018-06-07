@@ -1,7 +1,4 @@
 #include "/usr/local/share//rofi/themes//lb.theme"
-! ------------------------------------------------------------------------------
-! 			   ROFI THEME - AKHIL JACOB
-! ------------------------------------------------------------------------------
 
 !rofi.hide-scrollbar: true
 rofi.show-icons: true
