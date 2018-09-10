@@ -12,6 +12,7 @@ set ru
 set nrformats=hex,alpha
 set ul=100
 set nu
+set hls
 "set backupdir=d:/Temp
 syntax on
 
@@ -73,6 +74,8 @@ call plug#end()
 "                   Autoruns when you use Goyo
 " fzf           fzf finder
 """"""""""""""""""""""""""
+set diffopt=iwhite,filler,context:10000
+
 """""""""""""""""""""""""""
 " GENERIC GLOBAL SETTINGS "
 """""""""""""""""""""""""""

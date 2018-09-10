@@ -81,6 +81,8 @@ source $OSH/oh-my-bash.sh
 # alias ohmybash="mate ~/.oh-my-bash"
 
 alias gvim="nohup gvim floating enable &"
-alias gvim="nohup chromium-browser &"
-
+alias chrome="nohup chromium-browser &"
+alias beagle="ssh saad@192.168.7.2"
+alias conanclean="rm conanbuildinfo.props conanbuildinfo.txt conan_imports_manifest.txt conaninfo.txt"
+alias setPersonalGit="git config user.name \"Saad Rasheed\" && git config user.email \"saarasheed@outlook.com\""
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
