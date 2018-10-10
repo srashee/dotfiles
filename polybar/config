@@ -8,9 +8,9 @@
 ;=====================================================
 
 [colors]
-background = #1d2021
+background = #262626
 background-alt = #444
-foreground = #dfdfdf
+foreground = #ffffff
 foreground-alt = #55
 primary = #ffb52a
 secondary = #e60053
@@ -121,7 +121,7 @@ type = internal/cpu
 interval = 2
 format-prefix = "CPU: "
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #cc241d
+format-underline = #0077ff
 label = %percentage%%
 
 [module/memory]
@@ -129,7 +129,7 @@ type = internal/memory
 interval = 2
 format-prefix = "RAM: "
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #458588
+format-underline = #ff1d00
 label = %gb_used%
 
 [module/time]
@@ -137,7 +137,7 @@ type = custom/script
 exec = date '+%-I:%M %p'
 interval = 5
 label-font = 1
-format-foreground = #fe8019
+format-foreground = #e53c12
 
 [module/outsidetemp]
 type = custom/script
@@ -145,7 +145,7 @@ exec = ~/.config/polybar/weather.sh | awk -F'[ ,]' '{print $1}'
 format = Temp: <label>
 format-foreground = ${colors.foreground-alt}
 label-foreground = ${colors.foreground}
-format-underline = #d79921
+format-underline = #fff200
 interval = 60
 
 [module/feelslike]
@@ -154,16 +154,15 @@ exec = ~/.config/polybar/weather.sh | awk -F'[ ,]' '{print $2}'
 format = Feels: <label>
 format-foreground = ${colors.foreground-alt}
 label-foreground = ${colors.foreground}
-format-underline = #b16286
+format-underline = #ff7b00
 interval = 60
 
 [module/workcal]
 type = custom/script
-exec = ~/.config/polybar/example.py | awk ' {print $5,$6":",$1, $2, $3} '
-format = Next: <label>
+exec = ~/.config/polybar/example.py | awk ' {print $5,$6 ,$7":",$1, $2, $3} '
+format = Meeting: <label>
 format-foreground = ${colors.foreground-alt}
 label-foreground = ${colors.foreground}
-format-underline = #b16286
 interval = 600
 
 [module/date]
@@ -177,7 +176,7 @@ time = %H:%M
 time-alt = %H:%M:%S
 
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #98971a
+format-underline = #ff006a
 
 label = %date%
 
