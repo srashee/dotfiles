@@ -40,7 +40,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'yggdroot/indentline'
 Plug 'morhetz/gruvbox'
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'tpope/vim-fugitive'
 Plug 'majutsushi/tagbar'
@@ -75,6 +75,7 @@ call plug#end()
 " fzf           fzf finder
 """"""""""""""""""""""""""
 set diffopt=iwhite,filler,context:10000
+set diffopt+=vertical
 
 """""""""""""""""""""""""""
 " GENERIC GLOBAL SETTINGS "
@@ -132,7 +133,7 @@ autocmd ColorScheme * highlight ExtraWhitespace ctermbg=White guibg=red
 " Color options
 let g:indentLine_color_term = 179
 " Set the colorscheme to gruvbox (all gruvbox options must come before
-" colorscheme gruvbox)
+ colorscheme gruvbox
 let g:gruvbox_contrast_dark='hard'
 let g:gruvbox_italic=0
 colorscheme gruvbox
@@ -150,6 +151,10 @@ set noshowmode                      " The next three just remove a bunch of repe
 set noruler
 set showcmd
 "let g:airline_theme='gruvbox'       " Set airline theme
+
+
+" Cscope Specific
+set cscoperelative
 
 " Airline-Tabline
 let g:airline_extensions = []
