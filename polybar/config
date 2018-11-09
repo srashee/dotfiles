@@ -1,12 +1,3 @@
-;=====================================================
-;
-;   To learn more about how to configure Polybar
-;   go to https://github.com/jaagr/polybar
-;
-;   The README contains alot of information
-;
-;=====================================================
-
 [colors]
 background = #262626
 background-alt = #444
@@ -20,63 +11,230 @@ alert = #bd2c40
 margin-top = 5
 margin-bottom = 5
 
-[bar/main]
+[bar/top]
 monitor = ${env:MONITOR}
 width = 100%
-height = 35
-offset-x = 0%
-offset-y = 0%
+height = 34
 
-;background = ${xrdb:color9}
-background = ${colors.background}
-foreground = ${colors.foreground}
+background = #00000000
+foreground = #ccffffff
 
-overline-size = 2
-overline-color = #f00
-underline-size = 2
-underline-color = #00f
+line-color = ${bar/bottom.background}
+line-size = 16
 
-border-size = 100
-border-top-size = 20
-border-bottom-size = 0
-border-color = #00000000
+spacing = 2
+padding-right = 5
+module-margin = 4
 
-padding-left = 0
-padding-right = 1
-module-margin-left = 1
-module-margin-right = 1
+font-0 = NotoSans-Regular:size=8;-1
+font-1 = MaterialIcons:size=10;0
+font-2 = Termsynu:size=8:antialias=false;-2
+font-3 = FontAwesome:size=10;0
 
-font-0 = Terminess Powerline:size=10
-font-1 = Hack:pixelsize=10
-font-2 = Hack:style=bold:pixelsize=16;2
-font-3 = unifont:fontformat=truetype:size=6:heavy;-2
-font-4 = siji:pixelsize=10
-font-5 = FontAwesome:pixelsize=10
-
-modules-left = i3 volume word
+modules-left = i3 volume workcal
 modules-center = time
 modules-right = outsidetemp feelslike cpu memory date
 
-tray-position = right
-tray-padding = 1
-;tray-transparent = true
-;tray-background = #0063ff
+[bar/bottom]
+monitor = ${env:MONITOR}
+bottom = true
+width = 100%
+height = 27
 
-;wm-restack = bspwm
-;wm-restack = i3
+background = ${bar/top.background}
+foreground = ${bar/top.foreground}
 
-;override-redirect = true
+line-color = ${bar/top.background}
+line-size = 2
 
-;scroll-up = bspwm-desknext
-;scroll-down = bspwm-deskprev
+spacing = 3
+padding-right = 4
+module-margin-left = 0
+module-margin-right = 6
 
-;scroll-up = i3wm-wsnext
-;scroll-down = i3wm-wsprev
+font-0 = NotoSans-Regular:size=8;0
+font-1 = unifont:size=6;-3
+font-2 = FontAwesome:size=8;-2
+font-3 = NotoSans-Regular:size=8;-1
+font-4 = MaterialIcons:size=10;-1
+font-5 = Termsynu:size=8:antialias=false;0
+
+modules-left =
+modules-center = sback sick spotify snext
+modules-right =
+
+[module/snext]
+type = custom/script
+interval = 0
+exec = echo ">"
+format = <label>
+format-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground}
+click-left = spotifycli --next
+
+[module/sback]
+type = custom/script
+interval = 0
+exec = echo "<"
+format = <label>
+format-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground}
+click-left = spotifycli --prev
 
 
-[module/xwindow]
-type = internal/xwindow
-label = %title:0:30:...%
+
+;spotify-cli required
+;pip install spotify-cli-linux
+[module/sick]
+type = custom/script
+interval = 0
+exec = ~/.config/polybar/icon.sh
+format = <label>
+format-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground}
+click-left = spotifycli --playpause
+
+[module/spotify]
+type = custom/script
+interval = 1
+format-prefix = " "
+format = <label>
+exec = python ~/.config/polybar/spotify_status.py -f '{artist}: {song}'
+
+
+
+
+[module/backlight]
+type = internal/xbacklight
+format = <ramp> <bar>
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+
+bar-width = 10
+bar-indicator = |
+bar-indicator-font = 3
+bar-indicator-foreground = #ff
+bar-fill = ─
+bar-fill-font = 3
+bar-fill-foreground = #c9665e
+bar-empty = ─
+bar-empty-font = 3
+bar-empty-foreground = #44
+
+[module/battery]
+type = internal/battery
+full-at = 98
+
+format-charging = <animation-charging> <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+format-full = <ramp-capacity> <label-full>
+
+ramp-capacity-0 = 
+ramp-capacity-0-foreground = #f53c3c
+ramp-capacity-1 = 
+ramp-capacity-1-foreground = #ffa900
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+bar-capacity-width = 10
+bar-capacity-format = %{+u}%{+o}%fill%%empty%%{-u}%{-o}
+bar-capacity-fill = █
+bar-capacity-fill-foreground = #ddffffff
+bar-capacity-fill-font = 3
+bar-capacity-empty = █
+bar-capacity-empty-font = 3
+bar-capacity-empty-foreground = #44ffffff
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-framerate = 750
+
+[module/time]
+type = custom/script
+exec = date '+%-I:%M %p'
+interval = 5
+label-font = 1
+format-foreground = ${xrdb:color7:#222}
+click-left = lock.sh
+
+
+
+[module/bspwm]
+type = internal/bspwm
+
+ws-icon-0 = term;
+ws-icon-1 = web;
+ws-icon-2 = code;
+ws-icon-3 = music;
+ws-icon-4 = irssi;
+ws-icon-default = 
+
+format = <label-state> <label-mode>
+
+label-dimmed-underline = ${BAR.background}
+
+label-active = %icon%
+label-active-foreground = #fff
+label-active-background = #773f3f3f
+label-active-underline = #c9665e
+label-active-font = 4
+label-active-padding = 4
+
+label-occupied = %icon%
+label-occupied-foreground = #dd
+label-occupied-underline = #666
+label-occupied-font = 4
+label-occupied-padding = 4
+
+label-urgent = %icon%
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-underline = #9b0a20
+label-urgent-font = 4
+label-urgent-padding = 4
+
+label-empty = %icon%
+label-empty-foreground = #55
+label-empty-font = 4
+label-empty-padding = 4
+
+label-monocle = 
+label-monocle-underline = ${module/bspwm.label-active-underline}
+label-monocle-background = #33ffffff
+label-monocle-padding = 2
+
+label-locked = 
+label-locked-foreground = #bd2c40
+label-locked-underline = ${module/bspwm.label-monocle-underline}
+label-locked-padding = ${module/bspwm.label-monocle-padding}
+
+label-sticky = 
+label-sticky-foreground = #fba922
+label-sticky-underline = ${module/bspwm.label-monocle-underline}
+label-sticky-padding = ${module/bspwm.label-monocle-padding}
+
+label-private = 
+label-private-foreground = #bd2c40
+label-private-underline = ${module/bspwm.label-monocle-underline}
+label-private-padding = ${module/bspwm.label-monocle-padding}
+
+[module/bspwm-tmp]
+type = internal/bspwm
+format = <label-state>
+
+label-active = 
+label-active-padding = 1
+label-occupied = 
+label-occupied-padding = 1
+label-empty = 
+label-empty-padding = 1
+
 
 [module/i3]
 type = internal/i3
@@ -108,70 +266,6 @@ label-visible-background = ${self.label-focused-background}
 ;label-visible-underline = ${self.label-focused-underline}
 label-visible-padding = 2
 
-[module/player-mpris-tail]
-type = custom/script
-exec = ~/polybar-scripts/player-mpris-tail.py
-tail = true
-click-left = ~/polybar-scripts/player-ctrl.sh previous
-click-right = ~/polybar-scripts/player-ctrl.sh next
-click-middle = ~/polybar-scripts/player-ctrl.sh play-pause
-
-[module/cpu]
-type = internal/cpu
-interval = 2
-format-prefix = "CPU: "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #c17041
-label = %percentage%%
-
-[module/memory]
-type = internal/memory
-interval = 2
-format-prefix = "RAM: "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #c17041
-label = %gb_used%
-
-[module/time]
-type = custom/script
-exec = date '+%-I:%M %p'
-interval = 5
-label-font = 1
-format-foreground = #36e7ed
-
-[module/outsidetemp]
-type = custom/script
-exec = ~/.config/polybar/weather.sh | awk -F'[ ,]' '{print $1}'
-format = Temp: <label>
-format-foreground = ${colors.foreground-alt}
-label-foreground = ${colors.foreground}
-format-underline = #c17041
-interval = 60
-
-[module/feelslike]
-type = custom/script
-exec = ~/.config/polybar/weather.sh | awk -F'[ ,]' '{print $2}'
-format = Feels: <label>
-format-foreground = ${colors.foreground-alt}
-label-foreground = ${colors.foreground}
-format-underline = #c17041
-interval = 60
-
-[module/workcal]
-type = custom/script
-exec = ~/.config/polybar/example.py | awk ' {print $5,$6 ,$7":",$1, $2, $3} '
-format = Meeting: <label>
-format-foreground = ${colors.foreground-alt}
-label-foreground = ${colors.foreground}
-interval = 600
-
-[module/word]
-type = custom/script
-exec = python ~/.config/polybar/wordOfTheDay.py
-format = Word: <label>
-format-foreground = ${colors.foreground-alt}
-label-foreground = ${colors.foreground}
-interval = 600
 
 [module/date]
 type = internal/date
@@ -184,9 +278,107 @@ time = %H:%M
 time-alt = %H:%M:%S
 
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #c17041
 
 label = %date%
+
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = "RAM: "
+format-prefix-foreground = ${colors.foreground-alt}
+label = %gb_used%
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = "CPU: "
+format-prefix-foreground = ${colors.foreground-alt}
+label = %percentage%%
+
+[module/outsidetemp]
+type = custom/script
+exec = ~/.config/polybar/weather.sh | awk -F'[ ,]' '{print $1}'
+format = Temp: <label>
+format-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground}
+interval = 60
+
+[module/feelslike]
+type = custom/script
+exec = ~/.config/polybar/weather.sh | awk -F'[ ,]' '{print $2}'
+format = Feels: <label>
+format-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground}
+interval = 60
+
+[module/workcal]
+type = custom/script
+exec = ~/.config/polybar/example.py | awk ' {print $5,$6 ,$7":",$1, $2, $3} '
+format = Meeting: <label>
+format-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground}
+interval = 600
+
+
+
+[module/mpd]
+type = internal/mpd
+format-online = <icon-prev> <icon-stop> <toggle> <icon-next>  <icon-repeat> <icon-random>  <bar-progress> <label-time>  <label-song>
+
+icon-play = 
+icon-pause = 
+icon-stop = 
+icon-prev = 
+icon-next = 
+icon-random = 
+icon-repeat = 
+
+toggle-on-foreground =
+toggle-off-foreground = #55
+
+bar-progress-width = 45
+bar-progress-format = %{A4:mpdseek+2: A5:mpdseek-2:}%fill%%indicator%%empty%%{A A}
+bar-progress-indicator = |
+bar-progress-indicator-foreground = #ff
+bar-progress-indicator-font = 3
+bar-progress-fill = ─
+bar-progress-fill-foreground = #bb
+bar-progress-fill-font = 3
+bar-progress-empty = ─
+bar-progress-empty-font = 3
+bar-progress-empty-foreground = #44
+
+[module/wireless-network]
+type = internal/network
+interface = net1
+interval = 3.0
+ping-interval = 10
+
+format-connected = <ramp-signal> <label-connected>
+label-connected = %essid%
+label-disconnected =    not connected
+label-disconnected-foreground = #66
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+
+animation-packetloss-0 = 
+animation-packetloss-0-foreground = #ffa64c
+animation-packetloss-1 = 
+animation-packetloss-1-foreground = ${bar/top.foreground}
+animation-packetloss-framerate = 500
+
+[module/wired-network]
+type = internal/network
+interface = net0
+interval = 3.0
+
+label-connected =    %{T3}%local_ip%%{T-}
+label-disconnected-foreground = #66
 
 [module/volume]
 type = internal/volume
@@ -217,31 +409,10 @@ bar-volume-empty = ─
 bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground-alt}
 
-[module/powermenu]
-type = custom/menu
 
-format-spacing = 1
-
-label-open =  power
-label-open-foreground = ${colors.secondary}
-label-close =  cancel
-label-close-foreground = ${colors.secondary}
-label-separator = |
-label-separator-foreground = ${colors.foreground-alt}
-
-menu-0-0 = reboot
-menu-0-0-exec = menu-open-1
-menu-0-1 = power off
-menu-0-1-exec = menu-open-2
-
-menu-1-0 = cancel
-menu-1-0-exec = menu-open-0
-menu-1-1 = reboot
-menu-1-1-exec = sudo reboot
-
-menu-2-0 = power off
-menu-2-0-exec = sudo poweroff
-menu-2-1 = cancel
-menu-2-1-exec = menu-open-0
+[module/clock]
+type = internal/date
+interval = 2
+date = %%{F#999}%Y-%m-%d%%{F-}  %%{F#fff}%H:%M%%{F-}
 
 ; vim:ft=dosini
