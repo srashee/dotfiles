@@ -29,11 +29,15 @@ module-margin = 4
 font-0 = NotoSans-Regular:size=8;-1
 font-1 = MaterialIcons:size=10;0
 font-2 = Termsynu:size=8:antialias=false;-2
-font-3 = FontAwesome:size=10;0
+font-3 = "Font Awesome 5 Free:style=Regular:pixelsize=12;2"
+font-4 = "Font Awesome 5 Free:style=Solid:pixelsize=12;2"
+font-5 = "Font Awesome 5 Brands:style=Regular:pixelsize=12;2"
 
-modules-left = i3 volume workcal
+
+
+modules-left = i3 volume openChrome openTerm
 modules-center = time
-modules-right = outsidetemp feelslike cpu memory date
+modules-right = outsidetemp feelslike date
 
 [bar/bottom]
 monitor = ${env:MONITOR}
@@ -54,18 +58,37 @@ module-margin-right = 6
 
 font-0 = NotoSans-Regular:size=8;0
 font-1 = unifont:size=6;-3
-font-2 = FontAwesome:size=8;-2
-font-3 = NotoSans-Regular:size=8;-1
-font-4 = MaterialIcons:size=10;-1
-font-5 = Termsynu:size=8:antialias=false;0
+font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=12;2"
+font-3 = "Font Awesome 5 Free:style=Solid:pixelsize=12;2"
+font-4 = "Font Awesome 5 Brands:style=Regular:pixelsize=12;2"
+font-5 = NotoSans-Regular:size=8;-1
+font-6 = MaterialIcons:size=10;-1
+font-7 = Termsynu:size=8:antialias=false;0
 
-modules-left =
+modules-left = memory
 modules-center = sback sick spotify snext
-modules-right =
+modules-right = cpu
+
+[module/openChrome]
+type = custom/script
+exec = echo ""
+format = <label>
+format-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground}
+click-left = nohup google-chrome &
+
+[module/openTerm]
+type = custom/script
+exec = echo ""
+format = <label>
+format-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground}
+click-left = nohup xfce-terminal &
+
 
 [module/snext]
 type = custom/script
-exec = echo ">"
+exec = echo ""
 format = <label>
 format-foreground = ${colors.foreground-alt}
 label-foreground = ${colors.foreground}
@@ -73,7 +96,7 @@ click-left = spotifycli --next
 
 [module/sback]
 type = custom/script
-exec = echo "<"
+exec = echo ""
 format = <label>
 format-foreground = ${colors.foreground-alt}
 label-foreground = ${colors.foreground}
@@ -96,7 +119,7 @@ click-left = spotifycli --playpause
 type = custom/script
 interval = 1
 format-prefix = " "
-format = <label>
+format = <label>      
 exec = python ~/.config/polybar/spotify_status.py -f '{artist}: {song}'
 
 
@@ -157,7 +180,7 @@ animation-charging-framerate = 750
 type = custom/script
 exec = date '+%-I:%M %p'
 interval = 5
-label-font = 1
+label-font = 2
 format-foreground = #ffffff
 click-left = lock.sh
 
@@ -240,8 +263,10 @@ format = <label-state> <label-mode>
 index-sort = true
 wrapping-scroll = false
 pin-workspaces = true
-enable-click = false
+enable-click = true
 enable-scroll = false
+
+label-dimmed-underline = ${BAR.background}
 
 label-mode-padding = 2
 label-mode-foreground = #000
@@ -265,6 +290,7 @@ label-visible-background = ${self.label-focused-background}
 label-visible-padding = 2
 
 
+
 [module/date]
 type = internal/date
 interval = 5
@@ -282,22 +308,70 @@ label = %date%
 
 [module/memory]
 type = internal/memory
-interval = 2
-format-prefix = "RAM: "
-format-prefix-foreground = ${colors.foreground-alt}
-label = %gb_used%
+;interval = 2
+;format-prefix = "RAM: "
+;format-prefix-foreground = ${colors.foreground-alt}
+;label = %gb_used%
+format = <label> <bar-used>
+label = 
+
+bar-used-width = 30
+bar-used-foreground-0 = #aaff77
+bar-used-foreground-1 = #aaff77
+bar-used-foreground-2 = #fba922
+bar-used-foreground-3 = #ff5555
+bar-used-indicator = |
+bar-used-indicator-font = 6
+bar-used-indicator-foreground = #ff
+bar-used-fill = ─
+bar-used-fill-font = 6
+bar-used-empty = ─
+bar-used-empty-font = 6
+bar-used-empty-foreground = #444444
+
+
 
 [module/cpu]
 type = internal/cpu
-interval = 2
-format-prefix = "CPU: "
-format-prefix-foreground = ${colors.foreground-alt}
-label = %percentage%%
+;interval = 2
+;format-prefix = "CPU: "
+;format-prefix-foreground = ${colors.foreground-alt}
+;label = %percentage%%
+
+interval = 0.5
+format = <label> <ramp-coreload>
+label = 
+
+ramp-coreload-0 = ▁
+ramp-coreload-0-font = 2
+ramp-coreload-0-foreground = #aaff77
+ramp-coreload-1 = ▂
+ramp-coreload-1-font = 2
+ramp-coreload-1-foreground = #aaff77
+ramp-coreload-2 = ▃
+ramp-coreload-2-font = 2
+ramp-coreload-2-foreground = #aaff77
+ramp-coreload-3 = ▄
+ramp-coreload-3-font = 2
+ramp-coreload-3-foreground = #aaff77
+ramp-coreload-4 = ▅
+ramp-coreload-4-font = 2
+ramp-coreload-4-foreground = #fba922
+ramp-coreload-5 = ▆
+ramp-coreload-5-font = 2
+ramp-coreload-5-foreground = #fba922
+ramp-coreload-6 = ▇
+ramp-coreload-6-font = 2
+ramp-coreload-6-foreground = #ff5555
+ramp-coreload-7 = █
+ramp-coreload-7-font = 2
+ramp-coreload-7-foreground = #ff5555
+
 
 [module/outsidetemp]
 type = custom/script
 exec = ~/.config/polybar/weather.sh | awk -F'[ ,]' '{print $1}'
-format = Temp: <label>
+format =  T <label>
 format-foreground = ${colors.foreground-alt}
 label-foreground = ${colors.foreground}
 interval = 60
@@ -305,19 +379,10 @@ interval = 60
 [module/feelslike]
 type = custom/script
 exec = ~/.config/polybar/weather.sh | awk -F'[ ,]' '{print $2}'
-format = Feels: <label>
+format =  F <label>
 format-foreground = ${colors.foreground-alt}
 label-foreground = ${colors.foreground}
 interval = 60
-
-[module/workcal]
-type = custom/script
-exec = ~/.config/polybar/example.py | awk ' {print $5,$6 ,$7":",$1, $2, $3} '
-format = Meeting: <label>
-format-foreground = ${colors.foreground-alt}
-label-foreground = ${colors.foreground}
-interval = 600
-
 
 
 [module/mpd]
@@ -382,12 +447,12 @@ label-disconnected-foreground = #66
 type = internal/volume
 
 format-volume = <label-volume> <bar-volume>
-label-volume = VOL
+label-volume = 
 label-volume-foreground = ${root.foreground}
 
 format-muted-prefix = " "
 format-muted-foreground = ${colors.foreground-alt}
-label-muted = sound muted
+label-muted = 
 
 bar-volume-width = 10
 bar-volume-foreground-0 = #55aa55
