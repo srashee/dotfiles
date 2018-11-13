@@ -39,6 +39,9 @@ modules-left = i3 volume openChrome openTerm movews
 modules-center = time
 modules-right = outsidetemp feelslike date
 
+tray-position = right
+tray-padding = 1
+
 [bar/bottom]
 monitor = ${env:MONITOR}
 bottom = true
@@ -65,9 +68,16 @@ font-5 = NotoSans-Regular:size=8;-1
 font-6 = MaterialIcons:size=10;-1
 font-7 = Termsynu:size=8:antialias=false;0
 
-modules-left = memory
+modules-left = workCal
 modules-center = sback sick spotify snext
-modules-right = cpu
+modules-right = cpu memory
+
+[module/workCal]
+type = custom/script
+exec = ~/.config/polybar/example.py | awk ' {print $5,$6 ,$7":",$1, $2, $3} '
+format =      <label>
+format-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground}
 
 [module/openChrome]
 type = custom/script
@@ -75,7 +85,7 @@ exec = echo ""
 format = <label>
 format-foreground = ${colors.foreground-alt}
 label-foreground = ${colors.foreground}
-click-left = nohup google-chrome &
+click-left = nohup chromium-browser &
 
 [module/openTerm]
 type = custom/script
