@@ -12,7 +12,6 @@ set ru
 set nrformats=hex,alpha
 set ul=100
 set nu
-set hls
 "set backupdir=d:/Temp
 syntax on
 
