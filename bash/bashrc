@@ -80,9 +80,16 @@ source $OSH/oh-my-bash.sh
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
 
-alias gvim="nohup gvim floating enable &"
+alias glog="git log --oneline --decorate --graph --all"
+alias news=newsbeuter
+alias wifi="sudo systemctl restart network-manager"
+alias nogvim="nohup gvim floating enable &"
 alias chrome="nohup chromium-browser &"
 alias beagle="ssh saad@192.168.7.2"
 alias conanclean="rm conanbuildinfo.props conanbuildinfo.txt conan_imports_manifest.txt conaninfo.txt"
 alias setPersonalGit="git config user.name \"Saad Rasheed\" && git config user.email \"saarasheed@outlook.com\""
+alias freeworkspace="i3-msg workspace "
+alias cert="~/.config/polybar/expire.sh"
+alias githelp="printf \"Rebasing: git rebase --onto development development yourbranch\nGit Tree: git log --oneline --decorate --graph --all\nSquash: git reset --soft HEAD~N;git commit; git push -f \nend\"
+              "
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
