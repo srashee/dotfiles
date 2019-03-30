@@ -90,6 +90,6 @@ alias conanclean="rm conanbuildinfo.props conanbuildinfo.txt conan_imports_manif
 alias setPersonalGit="git config user.name \"Saad Rasheed\" && git config user.email \"saarasheed@outlook.com\""
 alias freeworkspace="i3-msg workspace "
 alias cert="~/.config/polybar/expire.sh"
-alias githelp="printf \"Rebasing: git rebase --onto development development yourbranch\nGit Tree: git log --oneline --decorate --graph --all\nSquash: git reset --soft HEAD~N;git commit; git push -f \nend\"
+alias githelp="printf \"Rebasing: git rebase --onto development development yourbranch\nGit Tree: git log --oneline --decorate --graph --all\nSquash: git reset --soft HEAD~N;git commit; git push -f \n Patch: git format-patch COMMIT-ID\nend\"
               "
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
