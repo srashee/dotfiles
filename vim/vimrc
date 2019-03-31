@@ -15,6 +15,9 @@ set nu
 "set backupdir=d:/Temp
 syntax on
 
+" This is needed for windows
+set clipboard=unnamed
+
 set ttimeout ttimeoutlen=50
 
 set nocscopeverbose
@@ -119,6 +122,9 @@ endif
 
 " Python line-character limit is 80
 autocmd FileType python setlocal colorcolumn=80
+
+autocmd FileType text setlocal colorcolumn=80
+
 
 " Automatically show trailing whitespace if not typing
 autocmd BufWinEnter * match ExtraWhitespace /\s\+\%#\@<!$/
