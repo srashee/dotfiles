@@ -1,0 +1,11 @@
+Following files should be in ~/.config/polybar
+
+config
+EmailAPI.json
+email.sh
+example.py
+expire.sh
+icon.sh
+launch.sh
+spotify_status.py
+weather.sh
