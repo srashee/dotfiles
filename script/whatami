@@ -1,0 +1,276 @@
+#!/usr/bin/env bash
+
+####################################################
+#												   #
+#          		Aura Fetch v0.3.5		           #
+#												   #
+#  An easily editable, super minimal info script   #
+#  https://gitlab.com/LionessAlana/aurafetch       #
+#												   #
+####################################################
+
+# Get command line args
+args=''
+while getopts ":n:h" opts; do
+	case "${opts}" in
+		n)
+			args=${OPTARG}
+			;;
+		h)
+			echo
+			echo "Usage:		aura -n '<module> <module>...'"
+			echo "Modules:	user, os, kernel, wm, shell, packages, colors" 
+			echo
+			echo "Example:	aura -n 'user shell colors'"
+			echo "This will exclude the user, shell and colors modules from the output."
+			echo
+			exit
+	esac
+done
+
+# Main function
+# Determines the order of the info printed
+# Comment out unwanted info, it's that simple
+get_info() {
+	echo
+	# Print user
+	if [[ ! $args =~ "user" ]]; then
+		get_user
+	fi
+
+	# Print os
+	if [[ ! $args =~ "os" ]]; then
+		get_os
+	fi
+
+	# Print kernel
+	if [[ ! $args =~ "kernel" ]]; then
+		get_kernel
+	fi
+
+	# Print wm
+	if [[ ! $args =~ "wm" ]]; then
+		get_wm
+	fi
+	
+	# Print shell
+	if [[ ! $args =~ "shell" ]]; then
+		get_shell
+	fi
+
+	# Print packages
+	if [[ ! $args =~ "package" ]]; then
+		get_pkg
+	fi
+
+	# Print terminal
+	if [[ ! $args =~ "term" ]]; then
+		get_term
+	fi
+
+    # Print certificate
+    if [[ ! $args =~ "cert" ]]; then
+		get_cert
+	fi
+
+	# Print colors
+	if [[ ! $args =~ "colors" ]]; then
+		echo
+ 		get_colors
+	fi
+	echo
+}
+
+# Output
+# Subsequent functions call this to format and output info 
+# Expects two args (e.g. output $title $os)
+output() {
+	c="\e[0m"
+	c1="\e[32;1m"
+	title=$1
+	info=$2
+
+	printf "${c1}${title}:${c}  	"
+	printf "%12.30s" ${info}
+	printf "\n"
+}
+
+# USER
+get_user() {
+	title="user"
+
+	output $title $USER
+}
+
+# OS
+get_os() {
+	title="os"
+	os=$(uname -o)
+	host=$(uname -n)
+
+	# Change the "os" declaration above if needed
+	case $os in
+		"GNU/Linux") # check for generic pitfall
+			if [ -f '/etc/lsb-release' ]; then
+				os=$(grep 'DISTRIB_ID=\(\w\+\)' /etc/lsb-release)
+				os=${os/*=}
+			else
+				os=$(grep '^NAME=\"\(\w\+\)' /etc/os-release)
+				os=${os/NAME=\"}
+			fi
+			os=${os,,}
+		;;
+
+		*) # catch others
+		;;
+	esac
+
+	output $title $os
+}
+
+# KERNEL
+# Super simple - fetch kernel info, split after dash
+get_kernel() {
+	title="kern"
+	kernel=$(uname -r)
+	kernel=${kernel/\-*}
+
+	output $title $kernel
+}
+
+# WM
+# Adapted from neofetch wm function.
+get_wm() {
+	title="wm"
+
+	id=$(xprop -root -notype _NET_SUPPORTING_WM_CHECK 2>/dev/null)
+	id=${id##* }
+	wm="$(xprop -id "$id" -notype -len 100 -f _NET_WM_NAME 8t 2>/dev/null)"
+
+	# Split name from inside double quotes
+	wm="${wm/*\ \"}" 
+	wm="${wm/\"*}"
+
+	# Check for i3-gaps
+	if [[ $wm == "i3" ]]; then 
+		if [[ $(which pacman) ]]; then
+			if [[ $(pacman -Qs i3-gaps) ]]; then
+				wm="i3-gaps"
+			fi
+		elif [[ -a /etc/debian_version ]]; then
+			if [[ $(dpkg -l i3-gaps &>/dev/null) ]]; then
+				wm="i3-gaps"
+			fi
+		fi
+	fi
+	
+	# Sourced from Neofetch
+	# Window Maker does not set _NET_WM_NAME
+   [[ "$wm" =~ "WINDOWMAKER" ]] && wm="wmaker"
+    # Fallback for non-EWMH window managers
+   [[ -z "$wm" ]] && \
+      wm="$(ps -e | grep -m 1 -o -F \
+                         -e "catwm" \
+                         -e "dwm" \
+                         -e "2bwm" \
+                         -e "monsterwm" \
+                         -e "tinywm")"
+
+
+	output $title $wm
+}
+
+# SHELL
+get_shell() {
+	title="sh"
+	shell=${SHELL}
+	shell=${shell/*\/}
+
+	output $title $shell
+}
+
+# PACKAGES
+# Get the number of packages from package manager
+# Edit this if you use a different package manager
+# "wc -l" counts the number of lines
+get_pkg() {
+	title="pkgs"
+	if [[ $(which pacman) ]]; then
+		count="$(pacman -Qq | wc -l)"
+	elif [[ $(which dpkg) ]]; then
+		count="$(dpkg -l | grep -c ^i)"
+	fi
+
+	output $title $count
+}
+
+get_cert() {
+    title="cert"
+    daysLeft=$(stat ~/motocert.p12 | grep "Modify" | cut -c 9-18)
+    newYear=$(date -d "$daysLeft+90 days" +%Y)
+    newMonth=$(date -d "$daysLeft+90 days" +%m)
+    newDay=$(date -d "$daysLeft+90 days" +%d)
+    cleanDate="$newYear/$newMonth/$newDay"
+    cert=$(expr '(' $(date -d $cleanDate  +%s) - $(date +%s) + 86399 ')' / 86400)
+    fix="d"
+    certfix="$cert$fix"
+    output $title $certfix
+
+}
+# TERMINAL
+# Get the current terminal process id and match it
+# Gets the parent process IDs and then eliminates shells
+# Relies on the shell name matching a regex pattern
+get_term() {
+	title="term"
+	pattern="[.+sh]"
+
+	# Backup
+	term=$TERM
+
+	pid=$(ps -h -o ppid)
+	ppids=$(ps -h -o comm -p $pid)
+	ignore_proc="login,startx,xinit,dwm"
+
+	for id in $ppids; do
+		if [[ ! $id =~ $pattern ]]; then
+			if [[ ! $ignore_proc =~ $id ]]; then
+				term=$id
+				break
+			fi
+		fi
+	done
+	
+	# Strip away anything after last hyphen
+	pattern="([a-z]+-[a-z]+)-.+"
+	if [[ $term =~ $pattern ]]; then
+		term=${BASH_REMATCH[1]}
+	else
+		term=${term/-*}
+	fi
+	output $title $term
+}
+
+# COLORS
+# Prints the terminal colors
+get_colors() {
+	c="\e[0m"
+	c0="\e[30m"
+	c1="\e[31m"
+	c2="\e[32m"
+	c3="\e[33m"
+	c4="\e[34m"
+	c5="\e[35m"
+	c6="\e[36m"
+	c7="\e[37m"
+
+	# The symbols that display the colors
+	sym="\u25b2"
+	sym1="\u25bc"
+
+	printf "   ${c1}${sym} ${c2}${sym1} ${c3}${sym} ${c4}${sym1} ${c5}${sym} ${c6}${sym1} ${c7}${sym}${c}\n"
+}
+
+# Main function call
+get_info
+
