@@ -45,7 +45,8 @@ sudo make install
 echo Installing config file
 cd ~
 git clone https://github.com/srashee/dotfiles.git
-cp dotfiles/config ~/.i3/config
+mkdir ~/.i3
+cp dotfiles/i3/config ~/.i3/config
 cp dotfiles/script/monitor.sh ~/.i3/config
 
 echo Lets start our window server
