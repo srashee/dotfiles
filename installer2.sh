@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# for rdesktop smart card support
+# install pcscd before installing rdesktop
 echo Installing Polybar
 cd ~/dotfiles/polybar
 ./installer.sh
