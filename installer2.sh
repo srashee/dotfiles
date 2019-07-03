@@ -2,6 +2,8 @@
 
 # for rdesktop smart card support
 # install pcscd before installing rdesktop
+# if you do build rdesktop from source again
+# ./configure --enable-smartcard; make; sudo make install
 echo Installing Polybar
 cd ~/dotfiles/polybar
 ./installer.sh
@@ -14,6 +16,7 @@ cp vim/vimrc ~/.vimrc
 
 # Fix this
 #cp xfce4/WorkTerminalRC ~/.config/Terminal/terminalrc
+
 
 echo Installing rofi
 sudo apt-get install rofi
