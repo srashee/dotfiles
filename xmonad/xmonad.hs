@@ -196,15 +196,6 @@ tall     = renamed [Replace "tall"]
            $ limitWindows 12
            $ mySpacing 8
            $ ResizableTall 1 (3/100) (1/2) []
-magnify  = renamed [Replace "magnify"]
-           $ smartBorders
-           $ windowNavigation
-           $ addTabs shrinkText myTabTheme
-           $ subLayout [] (smartBorders Simplest)
-           $ magnifier
-           $ limitWindows 12
-           $ mySpacing 8
-           $ ResizableTall 1 (3/100) (1/2) []
 monocle  = renamed [Replace "monocle"]
            $ smartBorders
            $ windowNavigation
@@ -280,7 +271,6 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
              where
                myDefaultLayout =     withBorder myBorderWidth tall
-                                 ||| magnify
                                  ||| noBorders monocle
                                  ||| floats
                                  ||| noBorders tabs
@@ -291,7 +281,6 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
                                  ||| tallAccordion
                                  ||| wideAccordion
 
--- myWorkspaces = [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
 myWorkspaces = [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
@@ -328,12 +317,13 @@ myManageHook = composeAll
 myKeys :: [(String, X ())]
 myKeys =
     -- Xmonad
-        [ ("M-S-r", spawn "xmonad --recompile")  -- Recompiles xmonad
-        , ("M-r", spawn "xmonad --restart")    -- Restarts xmonad
+        [ ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
+        , ("M-S-r", spawn "xmonad --restart")    -- Restarts xmonad
         , ("M-S-e", io exitSuccess)              -- Quits xmonad
 
     -- Run Prompt
         , ("M-S-<Return>", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
+
 
     -- Other Dmenu Prompts
     -- In Xmonad and many tiling window managers, M-p is the default keybinding to
@@ -354,6 +344,8 @@ myKeys =
     -- Useful programs to have a keybinding for launch
         , ("M-<Return>", spawn ("xfce4-terminal"))
         , ("M-M1-h", spawn (myTerminal ++ " -e htop"))
+        , ("M-S-o", spawn ("rofi -show drun"))
+
 
     -- Kill windows
         , ("M-S-q", kill)     -- Kill the currently focused client
@@ -462,7 +454,7 @@ myKeys =
 main :: IO ()
 main = do
     -- Launching three instances of xmobar on their monitors.
-    xmproc0 <- spawnPipe "xmobar -x 0 ~/.xmobarrc"
+    xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.xmobarrc"
     -- the xmonad, ya know...what the WM is named after!
     xmonad $ ewmh def
         { manageHook         = myManageHook <+> manageDocks
@@ -483,12 +475,12 @@ main = do
         , focusedBorderColor = myFocusColor
         , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
-              { ppOutput = \x -> hPutStrLn xmproc0 x
+              { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
               , ppCurrent = xmobarColor "#98be65" ""                          -- Current workspace
               , ppVisible = xmobarColor "#98be65" "" . clickable              -- Visible but not current workspace
-              , ppHidden = xmobarColor "#82AAFF" ""  . clickable -- Hidden workspaces
+              , ppHidden = xmobarColor "#82AAFF" ""                           -- Hidden workspaces
               , ppHiddenNoWindows = xmobarColor "#c792ea" ""  . clickable     -- Hidden workspaces (no windows)
-              , ppTitle = xmobarColor "#b3afc2" "" . shorten 60               -- Title of active window
+              , ppTitle = xmobarColor "#b3afc2" "" . shorten 30               -- Title of active window
               , ppSep =  "<fc=#666666> <fn=1>|</fn> </fc>"                    -- Separator character
               , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"            -- Urgent workspace
               , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]                    -- order of things in xmobar
